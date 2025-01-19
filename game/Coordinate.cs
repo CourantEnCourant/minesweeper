@@ -5,8 +5,20 @@ public class Coordinate
 
     public Coordinate(int row, int column)
     {
-        Row = row;
-        Column = column;
+        if (row > 8 || column > 8)
+        {
+            Console.WriteLine("Row and column value cannot exceed 8*8. Set current coordinate to (8 8)");
+            Console.Write("Press Enter to continue...");
+            Console.ReadLine();
+            Row = 8;
+            Column = 8;
+        }
+        else
+        {
+            Row = row;
+            Column = column;    
+        }
+        
     }
     
     public static bool operator ==(Coordinate left, Coordinate right)

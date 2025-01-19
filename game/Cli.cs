@@ -1,5 +1,6 @@
 
 
+using System.Net;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 
@@ -12,7 +13,7 @@ public class Cli
         while (true)
         {
             Console.Clear();
-            Console.WriteLine(@"Enter ""Start"", ""Quit"" or ""Fun fact""");
+            Console.Write(@"Enter ""start"", ""quit"" or ""fun fact"": ");
             var command = Console.ReadLine();
 
             if (!String.IsNullOrWhiteSpace(command))
@@ -22,20 +23,25 @@ public class Cli
 
             if (command == "start")
             {
-                Console.WriteLine("Game Started!\nEnter a coordinate to begin (e.g. 3 4)...");
                 _play();
             }
             else if (command == "quit")
             {
                 Console.WriteLine("Thank you for playing my game!");
-                Console.WriteLine("Press Enter to continue...");
+                Console.Write("Press Enter to continue...");
                 Console.ReadLine();
                 break;
             }
             else if (command == "fun fact")
             {
-                Console.WriteLine("Do you know I am actually a Turing complete game?");
-                Console.WriteLine("Press Enter to continue...");
+                Console.WriteLine("Do you know I am actually a Turing complete game? Only if I have infinite grid!");
+                Console.Write("Press Enter to continue...");
+                Console.ReadLine();
+            }
+            else
+            {
+                Console.WriteLine(@"Invalid command. Only ""start"", ""quit"", ""fun fact"" are allowed");
+                Console.Write("Press Enter to continue...");
                 Console.ReadLine();
             }
         }
@@ -43,27 +49,66 @@ public class Cli
 
     private static void _play()
     {
-        var firstMoveString = Console.ReadLine();
-        var firstMoveCoordinate = Parser.Input2Coordinate(firstMoveString);
-                
-        var grid = new Grid(row: 9, column: 9, mineNum: 10, firstMoveCoordinate: firstMoveCoordinate);
-        var controller = new Controller();
+        Console.Clear();
+        Console.WriteLine("WARNING");
+        Console.WriteLine("This MVP version shows mine location explicitly (noted by \"M\"), to facilitate testing and grading.");
+        Console.WriteLine("Grid set to 9*9, mine-count to 10.");
+        Console.Write("Press Enter to continue...");
+        Console.ReadLine();
+        
+        var pattern = @"\b([0-9]+) ([0-9]+)\b";
+        var firstMoveCoordinate = new Coordinate(3, 4);
+        while (true)
+        {
+            Console.Clear();
+            Console.Write("Game Started!\nEnter a coordinate to begin (e.g. 3 4): ");
+            
+            var regex = new Regex(pattern);
+            var firstMoveString = Console.ReadLine();
+            if (!String.IsNullOrWhiteSpace(firstMoveString) && regex.IsMatch(firstMoveString))
+            {
+                firstMoveCoordinate = Parser.Input2Coordinate(firstMoveString, pattern);
+                /*
+                if (firstMoveCoordinate.Row > 8 || firstMoveCoordinate.Column > 8)
+                {
+                    Console.WriteLine("First move cannot exceed (8 8)");
+                    Console.Write("Press Enter to continue...");
+                    Console.ReadLine();
+                    continue;
+                }
+                */
+                break;
+            }
+            else
+            {
+                Console.WriteLine("Input format should be single digit \"num num\". (e.g. 3 4) ");
+                Console.Write("Press Enter to continue...");
+                Console.ReadLine();
+                continue;
+            }
+        }
+
+        var grid = new Grid(row: 8, column: 8, mineNum: 10, firstMoveCoordinate: firstMoveCoordinate);
                 
         grid.Reveal(firstMoveCoordinate);
         var firstMoveCell = grid.Field[firstMoveCoordinate.Row][firstMoveCoordinate.Column];
         grid.CalculateAdjacent(firstMoveCell);
+        
+        var controller = new Controller();
+        controller.Move(firstMoveCoordinate);
                 
         while (true)
         {
             Console.Clear();
             grid.Display();
             
-            Console.WriteLine($"Controller point at: {controller.GetCurrentLocation()}");
-            Console.WriteLine(@"Enter two numbers to target a cell, ""R"" to reveal, ""F"" to flag: ");
+            var aimingAt = controller.AimingAt();
+            Console.WriteLine(aimingAt);
+            Console.Write(@"Enter two numbers to target a cell, ""R"" to reveal, ""F"" to flag: ");
             var input = Console.ReadLine();
             if (String.IsNullOrWhiteSpace(input))
             {
-                Console.WriteLine(@"Invalid input, must be 2 integers, ""R"" or ""F"" ");
+                Console.WriteLine(@"Invalid empty input. Must be 2 integers, ""R"" or ""F"" ");
                 Console.Write("Press enter to continue...");
                 Console.ReadLine();
                 continue;
@@ -88,15 +133,22 @@ public class Cli
                 var clickCoordinate = controller.Click();
                 grid.Flag(clickCoordinate);
             }
+            else if (Regex.IsMatch(input, pattern))
+            {
+                var targetCoordinate = Parser.Input2Coordinate(input, pattern);
+                controller.Move(targetCoordinate);
+            }
             else
             {
-                var moveCoordinate = Parser.Input2Coordinate(input);
-                controller.Move(moveCoordinate);
+                Console.WriteLine(@"Invalid input. Must be 2 integers, ""R"" or ""F"" ");
+                Console.Write("Press enter to continue... ");
+                Console.ReadLine();
+                continue;
             }
 
             if (grid.Win())
             {
-                Console.WriteLine("Congratulation! The field is save now!");
+                Console.WriteLine("Congratulation! You won the game!");
                 Console.WriteLine("Press enter to continue...");
                 Console.ReadLine();
                 break;

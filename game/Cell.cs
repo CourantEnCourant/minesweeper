@@ -35,9 +35,11 @@ public class Cell
     }
 
     public override string ToString()
-    {
+    {   // Pay attention to priority. e.g. Flagged should precede HasMine.
         if (Flagged)
             return " F ";
+        if (HasMine)
+            return " M ";
         if (_revealed)
             return $" {AdjacentMineCount.ToString()} ";
         return " - ";

@@ -19,4 +19,9 @@ public class Controller
     {
         return _currentCoordinate;
     }
+
+    public string AimingAt()
+    {
+        return $"Controller aiming at: ({_currentCoordinate.Row}, {_currentCoordinate.Column})";
+    }
 }
