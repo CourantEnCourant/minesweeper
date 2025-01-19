@@ -1,0 +1,17 @@
+using System.Data.Common;
+using game;
+
+public class Controller
+{
+    private Coordinate _currentCoordinate = new Coordinate(0, 0);
+    
+    public void Move(Coordinate coordinate)
+    {
+        _currentCoordinate = coordinate;
+    }
+
+    public Coordinate Click()
+    {
+        return _currentCoordinate;
+    }
+}
