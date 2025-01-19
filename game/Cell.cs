@@ -27,10 +27,11 @@ public class Cell
         Flagged = false;
     }
 
-    public void Demine()
+    public bool Demine()
     {
         if (HasMine && Flagged)
             Demined = true;
+        return Demined;
     }
 
     public override string ToString()

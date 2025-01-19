@@ -101,9 +101,19 @@ public class Grid
         }
     }
 
+    public bool Win()
+    {
+        return MinesDetected == MineNum;
+    } 
+
     public void Flag(Coordinate coordinate)
     {
-        Field[coordinate.Row][coordinate.Column].Flag();
+        var cell = Field[coordinate.Row][coordinate.Column];
+        cell.Flag();
+        if (cell.Demine())
+        {
+            MinesDetected++;
+        }
     }
 
 

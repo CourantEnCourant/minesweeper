@@ -3,8 +3,7 @@
 using System.Data.Common;
 using game;
 
-
-var game = new Cli();
 var controller = new Controller();
+Cli.InitializeGame();
 
-game.InitializeGame();
+

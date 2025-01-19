@@ -10,6 +10,11 @@ public class Controller
         _currentCoordinate = coordinate;
     }
 
+    public Coordinate GetCurrentLocation()
+    {
+        return _currentCoordinate;
+    }
+
     public Coordinate Click()
     {
         return _currentCoordinate;
