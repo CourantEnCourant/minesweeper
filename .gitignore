@@ -8,5 +8,10 @@
 # Jupyter files
 **/.ipynb_checkpoints/
 
-#gitkeep
+# gitkeep
 !**/*.gitkeep
+
+# C sharp
+game/Folder.DotSettings.user
+game/bin/**
+game/obj/**
