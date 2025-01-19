@@ -1,0 +1,12 @@
+# System files
+**/.DS_Store
+
+# Pycharm files
+**/__pycache__/
+**/.idea/
+
+# Jupyter files
+**/.ipynb_checkpoints/
+
+#gitkeep
+!**/*.gitkeep
