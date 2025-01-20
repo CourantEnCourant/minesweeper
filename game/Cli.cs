@@ -1,6 +1,7 @@
 
 
 using System.Net;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 
@@ -13,7 +14,7 @@ public class Cli
         while (true)
         {
             Console.Clear();
-            Console.Write(@"Enter ""start"", ""quit"" or ""fun fact"": ");
+            Console.Write(@"Enter ""start"", ""quit"", ""leaderboard"" or ""fun fact"": ");
             var command = Console.ReadLine();
 
             if (!String.IsNullOrWhiteSpace(command))
@@ -32,11 +33,23 @@ public class Cli
                 Console.ReadLine();
                 break;
             }
+            else if (command == "leaderboard")
+            {
+                var leaderboard = Leaderboard.ReadFrom();
+                foreach (var item in leaderboard)
+                {
+                    Console.WriteLine($"{item.Key}: {item.Value}");
+                }
+                Console.Write("Press Enter to continue...");
+                Console.ReadLine();
+                continue;
+            }
             else if (command == "fun fact")
             {
                 Console.WriteLine("Do you know I am actually a Turing complete game? Only if I have infinite grid!");
                 Console.Write("Press Enter to continue...");
                 Console.ReadLine();
+                continue;
             }
             else
             {
@@ -68,15 +81,6 @@ public class Cli
             if (!String.IsNullOrWhiteSpace(firstMoveString) && regex.IsMatch(firstMoveString))
             {
                 firstMoveCoordinate = Parser.Input2Coordinate(firstMoveString, pattern);
-                /*
-                if (firstMoveCoordinate.Row > 8 || firstMoveCoordinate.Column > 8)
-                {
-                    Console.WriteLine("First move cannot exceed (8 8)");
-                    Console.Write("Press Enter to continue...");
-                    Console.ReadLine();
-                    continue;
-                }
-                */
                 break;
             }
             else
@@ -149,8 +153,44 @@ public class Cli
             if (grid.Win())
             {
                 Console.WriteLine("Congratulation! You won the game!");
-                Console.WriteLine("Press enter to continue...");
+                Console.Write("Press Enter to continue...");
                 Console.ReadLine();
+                while (true)
+                {
+                    Console.Clear();
+                    Console.Write("Would you add your result to leaderboard ? [y/n]: ");
+                    var choice = Console.ReadLine();
+
+                    if (String.IsNullOrWhiteSpace(choice))
+                    {
+                        Console.WriteLine("Invalid input. Choose between [y/n]");
+                        Console.Write("Press Enter to continue...");
+                        Console.ReadLine();
+                        continue;
+                    }
+                    
+                    choice = choice.Trim().ToLower();
+                    if (choice == "y")
+                    {
+                        Console.Write("Enter your name: ");
+                        var name = Console.ReadLine();
+                        var leaderboard = Leaderboard.ReadFrom();
+                        leaderboard = Leaderboard.Record(name, leaderboard);
+                        Leaderboard.Output(leaderboard);
+                        break;
+                    }
+                    else if (choice == "n")
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        Console.WriteLine(@"Invalid input. Choose between [y/n].");
+                        Console.Write("Press Enter to continue");
+                        Console.ReadLine();
+                        break;
+                    }
+                }
                 break;
             }
         }
