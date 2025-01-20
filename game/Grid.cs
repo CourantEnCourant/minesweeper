@@ -62,6 +62,7 @@ public class Grid
     }
 
     public void CalculateAdjacent(Cell currentCell)
+        // Calculate adjacent mine number for a single cell
     {
         currentCell.AdjacentMineCount = 0;
         Console.WriteLine($"Current cell coordination: {currentCell.CellCoordinate}");
