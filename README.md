@@ -16,4 +16,3 @@ Mineswepper game implemented with C\#
 * Allow player to choose grid size and number of mines
 * Allow to select difficulty, i.e. configure grid size and number of mines
 * Add colors
-* 
