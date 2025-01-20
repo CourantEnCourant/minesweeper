@@ -1,5 +1,6 @@
 # Minesweeper with C\# v0.2
-Mineswepper game implemented with C\#
+* Mineswepper implemented with C\#
+* For detailed information, please refer to `./Documentation.md`
 
 ## Installation
 * Clone repository
