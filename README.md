@@ -1,4 +1,5 @@
 # Minesweeper with C\# v0.2
+Mineswepper game implemented with C\#
 
 ## Installation
 * Clone repository
@@ -13,4 +14,6 @@
 ## Future updates
 * Support mouse or `wasd` to navigate
 * Allow player to choose grid size and number of mines
+* Allow to select difficulty, i.e. configure grid size and number of mines
 * Add colors
+* 
