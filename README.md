@@ -2,7 +2,7 @@
 
 ## Installation
 * Clone repository
-* Navigate in to `game` directory, enter `dotnet run`
+* Navigate to `game` directory, enter `dotnet run`
 
 ## Tutorial
 * Follow instruction in the game
